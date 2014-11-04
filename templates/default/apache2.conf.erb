@@ -10,15 +10,49 @@
   CustomLog     <%= node['apache']['log_dir'] %>/munin_access.log combined
   ErrorLog      <%= node['apache']['log_dir'] %>/munin_error.log
 
+######## SSL Config ########
+<% case node['munin']['enable_ssl'] -%>
+<% when true -%>
+  SSLEngine On
+  SSLCertificateFile <%= node['munin']['ssl_cert_file'] %>
+  <% if node['munin']['ssl_cert_chain_file'] %>
+  SSLCertificateChainFile <%= node['munin']['ssl_cert_chain_file'] %>
+  <% end -%>
+  SSLCertificateKeyFile <%= node['munin']['ssl_cert_key_file'] %>
+
+<% else -%>
+
+# SSL for Munin Server is available
+# To enable SSL, change enable_ssl attribute to true
+
+<% end -%>
+########################
+
+
+
+######## Auth Methods #########
+
 <% case node['munin']['server_auth_method'] -%>
-<% when 'openid' -%>
+<% when "openid" -%>
+# openid method
   <Location />
     AuthName "Munin Server"
     AuthType OpenID
     require user <%= node['apache']['allowed_openids'].join(' ') %>
     AuthOpenIDDBLocation <%= node['apache']['mod_auth_openid']['dblocation'] %>
   </Location>
+# LDAP method
+<% when "ldap" -%>
+  <Location />
+    AuthName "Munin Server"
+    AuthBasicProvider <%= node['munin']['server_auth_method'] %>
+    AuthType Basic
+    AuthLDAPURL "<%= node['munin']['ldap_url'] %>"
+    AuthzLDAPAuthoritative <%= node['munin']['ldap_authoritative'] %>
+    require valid-user
+  </Location>
 <% else -%>
+# htpasswd method
   <Location />
     AuthName "Munin Server"
     AuthType Basic
@@ -26,6 +60,8 @@
     require valid-user
   </Location>
 <% end -%>
+
+################################
 
   RewriteEngine On
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /.*index\.html\ HTTP/

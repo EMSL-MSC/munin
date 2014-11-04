@@ -17,6 +17,18 @@
 # limitations under the License.
 #
 
+# Enable SSL Option
+default['munin']['enable_ssl'] = false
+default['munin']['ssl_cert_file'] = '/path/to/cert'
+default['munin']['ssl_cert_chain_file'] = '/path/to/chain'
+default['munin']['ssl_cert_key_file'] = '/path/to/key'
+default['munin']['web_server_port'] = node['munin']['enable_ssl'] ? ['443'] : '80'
+default['apache']['listen_ports'] = node['munin']['enable_ssl'] ? ['443'] : ['80']
+
+# LDAP additions, need customized if enabled
+default['munin']['ldap_authoritative'] = 'On'
+default['munin']['ldap_url'] = 'ldaps://127.0.0.1/ldap_params'
+
 default['munin']['sysadmin_email'] = 'ops@example.com'
 default['munin']['server_role'] = 'monitoring'
 default['munin']['server_list'] = nil
@@ -24,7 +36,6 @@ default['munin']['server_auth_method'] = 'openid'
 default['munin']['multi_environment_monitoring'] = false
 
 default['munin']['web_server'] = 'apache'
-default['munin']['web_server_port'] = 80
 default['munin']['public_domain'] = nil
 
 case node['platform']

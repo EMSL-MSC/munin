@@ -2,22 +2,35 @@ driver_plugin: vagrant
 driver_config:
   require_chef_omnibus: true
 
+provisioner:
+  name: chef_solo
+
 platforms:
+  - name: fedora-20
   - name: ubuntu-12.04
     run_list:
       - recipe[apt]
-  - name: centos-6.4
+#  - name: ubuntu-14.04
+#    run_list:
+#      - recipe[apt]
 
 suites:
   - name: client
+    data_bags_path: ../../data_bags
+    roles_path: ../../roles
     run_list:
       - recipe[munin::client]
   - name: server
+    data_bags_path: ../chef-repo/data_bags
+    roles_path: ../chef-repo/roles
     run_list:
       - recipe[munin::server]
-  - name: server_apache
-    run_list:
-      - recipe[munin::server_apache]
-  - name: server_nginx
-    run_list:
-      - recipe[munin::server_nginx]
+    attributes:
+      munin:
+        server_auth_method: htpasswd
+#  - name: server_apache
+#    run_list:
+#      - recipe[munin::server_apache]
+#  - name: server_nginx
+#    run_list:
+#      - recipe[munin::server_nginx]

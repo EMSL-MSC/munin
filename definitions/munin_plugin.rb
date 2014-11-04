@@ -29,10 +29,10 @@ define :munin_plugin, :create_file => false, :enable => true, :cookbook => 'muni
   if params[:create_file]
     cookbook_file "#{plugin_dir}/#{params[:name]}" do
       cookbook params[:cookbook]
-      source   "plugins/#{params[:name]}"
-      owner    'root'
-      group    node['munin']['root']['group']
-      mode     '0755'
+      source "plugins/#{params[:name]}"
+      owner 'root'
+      group node['munin']['root']['group']
+      mode '0755'
     end
   end
 

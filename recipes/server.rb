@@ -62,7 +62,7 @@ if Chef::Config[:solo]
 else
   munin_servers = []
   if node['munin']['multi_environment_monitoring']
-    if node['munin']['multi_environment_monitoring'].kind_of?(Array)
+    if node['munin']['multi_environment_monitoring'].is_a?(Array)
       node['munin']['multi_environment_monitoring'].each do |searchenv|
         search(:node, "munin:[* TO *] AND chef_environment:#{searchenv}").each do |n|
           munin_servers << n
@@ -81,6 +81,9 @@ if munin_servers.empty?
   munin_servers = [node]
 end
 
+#### This is a fix for chef hosts without an fqdn configured, passed test ####
+munin_servers.delete_if { |s| s[:fqdn].nil? }
+
 munin_servers.sort! { |a, b| a['fqdn'] <=> b['fqdn'] }
 
 case node['platform']
@@ -94,29 +97,29 @@ case node['platform']
 when 'arch'
   cron 'munin-graph-html' do
     command '/usr/bin/munin-cron'
-    user    'munin'
-    minute  '*/5'
+    user 'munin'
+    minute '*/5'
   end
 when 'freebsd'
   cron 'munin-graph-html' do
-    command        '/usr/local/bin/munin-cron'
-    user           'munin'
-    minute         '*/5'
+    command '/usr/local/bin/munin-cron'
+    user 'munin'
+    minute '*/5'
     ignore_failure true
   end
 else
   cookbook_file '/etc/cron.d/munin' do
     source 'munin-cron'
-    mode   '0644'
-    owner  'root'
-    group  node['munin']['root']['group']
+    mode '0644'
+    owner 'root'
+    group node['munin']['root']['group']
     backup 0
   end
 end
 
 template "#{node['munin']['basedir']}/munin.conf" do
   source 'munin.conf.erb'
-  mode   '0644'
+  mode '0644'
   variables(
     :munin_nodes => munin_servers
   )
@@ -133,12 +136,19 @@ when 'openid'
   else
     fail 'OpenID is unsupported on non-apache installs'
   end
+when 'ldap'
+  if web_srv == :apache
+    include_recipe 'apache2::mod_authnz_ldap'
+    include_recipe 'apache2::mod_ssl'
+  else
+    fail 'ldap requires SSL to be enabled, something went wrong'
+  end
 else
   template "#{node['munin']['basedir']}/htpasswd.users" do
     source 'htpasswd.users.erb'
-    owner  'munin'
-    group  web_group
-    mode   '0644'
+    owner 'munin'
+    group web_group
+    mode '0644'
     variables(
       :sysadmins => sysadmins
     )
@@ -148,5 +158,5 @@ end
 directory node['munin']['docroot'] do
   owner 'munin'
   group 'munin'
-  mode  '0755'
+  mode '0755'
 end

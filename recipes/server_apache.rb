@@ -30,10 +30,10 @@ end
 
 template "#{node['apache']['dir']}/sites-available/munin.conf" do
   source 'apache2.conf.erb'
-  mode   '0644'
+  mode '0644'
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/munin.conf")
     notifies :reload, 'service[apache2]'
   end
 end
 
-apache_site 'munin.conf'
+apache_site 'munin'

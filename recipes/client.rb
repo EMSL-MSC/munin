@@ -45,7 +45,7 @@ package 'munin-node'
 
 template "#{node['munin']['basedir']}/munin-node.conf" do
   source 'munin-node.conf.erb'
-  mode   '0644'
+  mode '0644'
   variables :munin_server_ips => munin_server_ips
   notifies :restart, "service[#{service_name}]"
 end

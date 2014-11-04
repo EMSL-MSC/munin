@@ -33,8 +33,8 @@ end
 munin_conf = File.join(node['nginx']['dir'], 'sites-available', 'munin.conf')
 
 template munin_conf do
-  source   'nginx.conf.erb'
-  mode     '0644'
+  source 'nginx.conf.erb'
+  mode '0644'
   notifies :reload, 'service[nginx]' if ::File.symlink?(munin_conf)
 end
 
