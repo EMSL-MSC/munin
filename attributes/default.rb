@@ -27,7 +27,7 @@ default['apache']['listen_ports'] = node['munin']['enable_ssl'] ? ['443'] : ['80
 
 # LDAP additions, need customized if enabled
 default['munin']['ldap_authoritative'] = 'On'
-default['munin']['ldap_url'] = 'ldaps://127.0.0.1/ldap_params'
+default['munin']['ldap_url'] = 'ldaps://somco.contoso.com/dc=somco,dc=contoso,dc=com?uid?sub?(memberOf=cn=sites,ou=Users,dc=somco,dc=contoso,dc=com)'
 
 default['munin']['sysadmin_email'] = 'ops@example.com'
 default['munin']['server_role'] = 'monitoring'
