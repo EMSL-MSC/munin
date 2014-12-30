@@ -143,6 +143,8 @@ when 'ldap'
   else
     fail 'ldap requires SSL to be enabled, something went wrong'
   end
+when 'none'
+  puts 'No authentication method is chosen, using http and open to anyone, BE WARNED'
 else
   template "#{node['munin']['basedir']}/htpasswd.users" do
     source 'htpasswd.users.erb'
