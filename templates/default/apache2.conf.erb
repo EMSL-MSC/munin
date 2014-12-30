@@ -51,6 +51,12 @@
     AuthzLDAPAuthoritative <%= node['munin']['ldap_authoritative'] %>
     require valid-user
   </Location>
+<% when "none" -%>
+  <Location />
+    AuthType None
+    Require all granted
+# No Auth method selected, optional authentication methods exist, see munin cookbook for more info    
+  </Location>
 <% else -%>
 # htpasswd method
   <Location />
