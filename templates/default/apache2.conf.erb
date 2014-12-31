@@ -52,11 +52,11 @@
     require valid-user
   </Location>
 <% when "none" -%>
-  <Location />
+  <Directory /www/html/munin>
     AuthType None
     Require all granted
+  </Directory>
 # No Auth method selected, optional authentication methods exist, see munin cookbook for more info    
-  </Location>
 <% else -%>
 # htpasswd method
   <Location />
