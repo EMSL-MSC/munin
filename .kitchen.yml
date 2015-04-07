@@ -3,7 +3,7 @@ driver_config:
   require_chef_omnibus: true
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
 
 platforms:
   - name: fedora-20
@@ -31,7 +31,7 @@ suites:
       - role[munin_server]
     attributes:
       munin:
-        server_auth_method: htpasswd
+        server_auth_method: none
 #  - name: server_apache
 #    run_list:
 #      - recipe[munin::server_apache]
