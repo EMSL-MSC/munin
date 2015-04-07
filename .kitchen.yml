@@ -7,24 +7,28 @@ provisioner:
 
 platforms:
   - name: fedora-20
-  - name: ubuntu-12.04
+  - name: ubuntu-14.04
     run_list:
       - recipe[apt]
-#  - name: ubuntu-14.04
-#    run_list:
-#      - recipe[apt]
+  - name: centos-6.6
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8090}]
+        - ["forwarded_port", {guest: 443, host: 4433}]
+  - name: centos-7.0
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 8091}]
+        - ["forwarded_port", {guest: 443, host: 4434}]
 
 suites:
-  - name: client
-    data_bags_path: ../../data_bags
-    roles_path: ../../roles
+  - name: munin-client
     run_list:
       - recipe[munin::client]
-  - name: server
-    data_bags_path: ../chef-repo/data_bags
-    roles_path: ../chef-repo/roles
+  - name: munin-server
     run_list:
       - recipe[munin::server]
+      - role[munin_server]
     attributes:
       munin:
         server_auth_method: htpasswd
@@ -34,3 +38,7 @@ suites:
 #  - name: server_nginx
 #    run_list:
 #      - recipe[munin::server_nginx]
+
+data_bags_path: test/integration/data_bags/
+roles_path: test/integration/roles/
+environments_path: test/integration/environments
