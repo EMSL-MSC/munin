@@ -1,0 +1,25 @@
+{
+  "name": "munin_server",
+  "description": "Role used strictly for Munin Servers",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+    "apache": {
+      "contact": "munin@localhost.localhost",
+      "listen_ports": "80"
+    },
+    "munin": {
+      "multi_environment_monitoring": "false",
+      "sysadmin_email": "munin@localhost.localhost"
+    }
+  },
+  "override_attributes": {
+
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[munin::server]"
+  ],
+  "env_run_lists": {
+
+  }
+}
