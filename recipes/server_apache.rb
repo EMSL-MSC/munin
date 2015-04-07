@@ -24,16 +24,20 @@ end
 include_recipe 'apache2::default'
 include_recipe 'apache2::mod_rewrite'
 
+if node['munin'].fetch('graph_strategy', 'cron') == 'cgi'
+  include_recipe 'apache2::mod_fcgid'
+end
+
 apache_site '000-default' do
   enable false
 end
 
 template "#{node['apache']['dir']}/sites-available/munin.conf" do
   source 'apache2.conf.erb'
-  mode '0644'
+  mode   '0644'
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/munin.conf")
     notifies :reload, 'service[apache2]'
   end
 end
 
-apache_site 'munin'
+apache_site 'munin.conf'
