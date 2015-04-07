@@ -13,7 +13,7 @@ Chef-solo:
 - See Data Bags section below in order to configure access to Munin web UI.
 
 Chef-client:
-- The monitoring server that uses this recipe should have a role named '`monitoring`'. This is configurable with an attribute (see below). The recipes use search, and narrow the results to nodes in the same `chef_environment`.
+- The monitoring server that uses this recipe should have a role named '`munin_monitoring`'. This is configurable with an attribute (see below). The recipes use search, and narrow the results to nodes in the same `chef_environment`.
 
 ### Platforms
 - Debian/Ubuntu
@@ -34,7 +34,7 @@ Attributes
 - `node['munin']['sysadmin_email']` - default email address for serveradmin in vhost.
 - `node['munin']['server_auth_method']` - the authentication method to use, default is openid. Any other value will use htauth basic with an htpasswd file.
 - `node['munin']['multi_environment_monitoring']` - allow multi-environment monitoring.  Default is false. Allowed values are 'true', 'false' or a list of names of chef-environments.
-- `node['munin']['server_role']` - role of the munin server. Default is monitoring.
+- `node['munin']['server_role']` - role of the munin server. Default is munin_monitoring.
 - `node['munin']['docroot']` - document root for the server apache vhost. on archlinux, the default is `/srv/http/munin`, or `/var/www/munin` on other platforms.
 - `node['munin']['web_server']` - supports apache or nginx, default is "apache"
 - `node['munin']['public_domain']` - override munin domain.
@@ -86,10 +86,10 @@ For example use the `{SHA}oCagzV4lMZyS7jl2Z0WlmLxEkt4=` value in the data bag.
 
 Usage
 -----
-Create a role named `monitoring` that includes the munin::server recipe in the run list. Adjust the docroot to suit your environment.
+Create a role named `munin_monitoring` that includes the munin::server recipe in the run list. Adjust the docroot to suit your environment.
 
 ```ruby
-name 'monitoring'
+name 'munin_monitoring'
 description 'The monitoring server'
 run_list(
   'recipe[munin::server]'
@@ -105,7 +105,7 @@ name 'production'
 description 'Nodes in production'
 ```
 
-For chef-client mode clients will automatically search for the server based on the value of the `node['munin']['server_role']` attribute in the same environment. If you don't use `monitoring` as the role name, change it in a role that is applied to any nodes that get the `munin::client` recipe.
+For chef-client mode clients will automatically search for the server based on the value of the `node['munin']['server_role']` attribute in the same environment. If you don't use `munin_monitoring` as the role name, change it in a role that is applied to any nodes that get the `munin::client` recipe.
 
 ### Multi-Environment Monitoring
 By default munin-server will only search the nodes own chef-environment for clients to monitor. Monitoring all available clients in all environment can be done by setting the ```node['munin']['multi_environment_monitoring'] = 'true'```.

@@ -30,7 +30,7 @@ default['munin']['ldap_authoritative'] = 'On'
 default['munin']['ldap_url'] = 'ldaps://somco.contoso.com/dc=somco,dc=contoso,dc=com?uid?sub?(memberOf=cn=sites,ou=Users,dc=somco,dc=contoso,dc=com)'
 
 default['munin']['sysadmin_email'] = 'ops@example.com'
-default['munin']['server_role'] = 'monitoring'
+default['munin']['server_role'] = 'munin_server'
 default['munin']['server_list'] = nil
 default['munin']['server_auth_method'] = 'openid'
 default['munin']['multi_environment_monitoring'] = false
