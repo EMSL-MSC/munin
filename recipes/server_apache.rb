@@ -25,7 +25,32 @@ include_recipe 'apache2::default'
 include_recipe 'apache2::mod_rewrite'
 
 if node['munin'].fetch('graph_strategy', 'cron') == 'cgi'
+  node.override['apache']['user'] = 'apache'
+  node.override['apache']['group'] = 'apache'
   include_recipe 'apache2::mod_fcgid'
+  directory '/var/run/httpd/mod_fcgid' do
+    owner 'apache'
+    group 'apache'
+    mode '0755'
+    recursive true
+    action :create
+    notifies :restart, 'service[apache2]'
+  end
+  file '/var/run/httpd/mod_fcgid/fcgid_shm' do
+    owner 'apache'
+    group 'apache'
+    mode '0755'
+    notifies :restart, 'service[apache2]'
+  end
+end
+%w( munin-cgi-graph munin-cgi-html ).each do |scg|
+  file "/var/www/cgi-bin/#{scg}" do
+    owner 'apache'
+    group 'apache'
+    mode '0755'
+    action :touch
+    notifies :restart, 'service[apache2]'
+  end
 end
 
 apache_site '000-default' do
@@ -34,10 +59,10 @@ end
 
 template "#{node['apache']['dir']}/sites-available/munin.conf" do
   source 'apache2.conf.erb'
-  mode   '0644'
+  mode '0644'
   if ::File.symlink?("#{node['apache']['dir']}/sites-enabled/munin.conf")
-    notifies :reload, 'service[apache2]'
+    notifies :restart, 'service[apache2]'
   end
 end
 
-apache_site 'munin.conf'
+apache_site 'munin'
