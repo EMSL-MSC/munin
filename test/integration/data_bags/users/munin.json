@@ -1,0 +1,15 @@
+{
+  "name": "data_bag_item_users_munin",
+  "json_class": "Chef::DataBagItem",
+  "chef_type": "data_bag_item",
+  "data_bag": "users",
+  "raw_data": {
+    "id": "munin",
+    "groups": "sysadmin",
+    "htpasswd": "",
+    "nagios": {
+      "pager": "",
+      "email": "munin@localhost.localhost"
+    }
+  }
+}
