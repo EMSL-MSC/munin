@@ -11,11 +11,15 @@ platforms:
     run_list:
       - recipe[apt]
   - name: centos-6.6
+    run_list:
+      - recipe[yum-epel]
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8090}]
         - ["forwarded_port", {guest: 443, host: 4433}]
   - name: centos-7.0
+    run_list:
+      - recipe[yum-epel]
     driver_config:
       network:
         - ["forwarded_port", {guest: 80, host: 8091}]
