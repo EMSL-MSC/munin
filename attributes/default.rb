@@ -18,12 +18,18 @@
 #
 
 # Enable SSL Option
-default['munin']['enable_ssl'] = false
+default['munin']['enable_ssl'] = nil
 default['munin']['ssl_cert_file'] = '/path/to/cert'
 default['munin']['ssl_cert_chain_file'] = '/path/to/chain'
 default['munin']['ssl_cert_key_file'] = '/path/to/key'
 default['munin']['web_server_port'] = node['munin']['enable_ssl'] ? '443' : '80'
-default['apache']['listen_ports'] = node['munin']['enable_ssl'] ? ['443'] : ['80']
+
+#case node['munin']['enable_ssl']
+#when true
+#  default['apache']['listen_ports'] = %w(443)
+#else
+#  default['apache']['listen_ports'] = %w(80)
+#end
 
 # LDAP additions, need customized if enabled
 default['munin']['ldap_authoritative'] = 'On'
@@ -86,3 +92,4 @@ default['munin']['tmpldir'] = "#{default['munin']['basedir']}/templates"
 default['munin']['max_graph_jobs'] = '6'
 default['munin']['max_cgi_graph_jobs'] = '6'
 default['munin']['max_processes'] = nil # use as many as necessary
+default['munin']['graph_strategy'] = 'cgi'
