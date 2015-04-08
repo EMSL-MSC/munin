@@ -68,6 +68,10 @@
 <% end -%>
 
 ################################
+# /var/www/cgi-bin/munin-cgi-graph
+# /var/www/cgi-bin/munin-cgi-html
+################################
+
 
 <% if node['munin'].fetch('graph_strategy', 'cron') == 'cgi' %>
   # Rewrites
@@ -80,14 +84,14 @@
   # HTML
   RewriteCond %{REQUEST_URI} .html$ [or]
   RewriteCond %{REQUEST_URI} !.png$
-  RewriteRule ^/(.*) /usr/lib/munin/cgi/munin-cgi-html/$1 [L]
+  RewriteRule ^/(.*) /var/www/cgi-bin/munin-cgi-html/$1 [L]
 
   # Images
   RewriteRule ^/munin-cgi/munin-cgi-graph/(.*) /$1
-  RewriteRule ^/(.*\.png) /usr/lib/munin/cgi/munin-cgi-graph/$1 [L]
+  RewriteRule ^/(.*\.png) /var/www/cgi-bin/munin-cgi-graph/$1 [L]
 
   # Ensure we can run (fast)cgi scripts
-  <Directory "/usr/lib/munin/cgi">
+  <Directory "/var/www/cgi-bin">
     Options +ExecCGI
     <IfModule mod_fcgid.c>
       SetHandler fcgid-script
