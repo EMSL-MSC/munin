@@ -1,6 +1,5 @@
-site :opscode
+source 'https://supermarket.getchef.com'
+
 metadata
 
-group :integration do
-  cookbook 'apt', '~> 2.0'
-end
+# cookbook 'munin', git: 'https://github.com/EMSL-MSC/munin.git'
