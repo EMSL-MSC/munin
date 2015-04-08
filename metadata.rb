@@ -8,6 +8,10 @@ version '1.4.7'
 
 depends 'apache2'
 depends 'nginx', '>= 1.8'
+depends 'apt'
+depends 'yum-epel'
+depends 'firewalld'
+depends 'selinux'
 
 supports 'arch'
 supports 'centos'
