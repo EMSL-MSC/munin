@@ -126,6 +126,7 @@ template "#{node['munin']['basedir']}/munin.conf" do
 end
 
 directory "#{node['munin']['basedir']}/munin-conf.d" do
+  mode '0755'
   action :create
 end
 

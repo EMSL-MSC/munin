@@ -24,12 +24,12 @@ default['munin']['ssl_cert_chain_file'] = '/path/to/chain'
 default['munin']['ssl_cert_key_file'] = '/path/to/key'
 default['munin']['web_server_port'] = node['munin']['enable_ssl'] ? '443' : '80'
 
-#case node['munin']['enable_ssl']
-#when true
+# case node['munin']['enable_ssl']
+# when true
 #  default['apache']['listen_ports'] = %w(443)
-#else
+# else
 #  default['apache']['listen_ports'] = %w(80)
-#end
+# end
 
 # LDAP additions, need customized if enabled
 default['munin']['ldap_authoritative'] = 'On'
